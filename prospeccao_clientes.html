@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#182554">
+<title>Gestão Comercial · Contratos, Ritos de Visita e Prospecção</title>
+<style>
+/* ─────────────────────────── CONFIG / TEMA ─────────────────────────── */
+:root{
+  --navy:#182554; --laranja:#E56C35; --branco:#FFFFFF; --cinza-esc:#4D4F53;
+  --vermelho:#C8102E; --cinza-claro:#BBBCBC;
+  --azul1:#00617F; --azul1t:#6599AE; --azul2:#0086BF; --azul2t:#31B1D9;
+  --grafite:#333F48; --laranja2:#FF6A13; --verde:#2E8B57;
+  --zebra:#F4F7FB; --borda:#E3E8F0; --bg:#FFFFFF;
+  --sombra:0 2px 14px rgba(24,37,84,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);color:var(--grafite);line-height:1.5;font-size:15px}
+/* HEADER */
+header{background:var(--navy);color:#fff;padding:18px 26px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;box-shadow:var(--sombra)}
+header h1{font-size:20px;font-weight:700}
+header .sub{font-size:12px;color:var(--azul2t);margin-top:3px}
+.stamp{font-size:11.5px;background:rgba(255,255,255,.1);padding:6px 12px;border-radius:6px;border-left:3px solid var(--laranja)}
+/* NAV */
+nav{background:#fff;border-bottom:2px solid var(--borda);display:flex;flex-wrap:wrap;padding:0 14px;position:sticky;top:70px;z-index:40}
+nav button{background:none;border:none;padding:13px 15px;font-size:13.5px;font-weight:600;color:var(--cinza-esc);cursor:pointer;border-bottom:3px solid transparent;transition:.2s}
+nav button:hover{color:var(--navy)}
+nav button.active{color:var(--navy);border-bottom-color:var(--laranja)}
+/* LAYOUT */
+main{max-width:1320px;margin:0 auto;padding:24px 20px 60px}
+.tab{display:none;animation:fade .25s ease}
+.tab.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2.section{color:var(--navy);font-size:19px;margin:4px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--borda);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h3.sub{color:var(--azul1);font-size:15.5px;margin:22px 0 10px;font-weight:700}
+p.lead{color:var(--cinza-esc);margin-bottom:14px;max-width:900px}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:#fff;border:1px solid var(--borda);border-radius:10px;padding:15px;box-shadow:var(--sombra);border-top:4px solid var(--laranja)}
+.kpi .v{font-size:26px;font-weight:800;color:var(--navy);line-height:1.1}
+.kpi .l{font-size:12px;color:var(--cinza-esc);margin-top:5px}
+.kpi.alt{border-top-color:var(--azul2)} .kpi.alt2{border-top-color:var(--azul1)} .kpi.alt3{border-top-color:var(--vermelho)} .kpi.alt4{border-top-color:var(--verde)}
+/* TABELAS */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--borda);border-radius:10px;box-shadow:var(--sombra);margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:680px}
+thead th{background:var(--navy);color:#fff;text-align:left;padding:11px 13px;font-weight:600;font-size:12.5px;white-space:nowrap}
+tbody td{padding:10px 13px;border-bottom:1px solid var(--borda);vertical-align:top}
+tbody tr:nth-child(even){background:var(--zebra)}
+tbody tr:hover{background:#EAF2F8}
+/* TAGS */
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.t-ao{background:var(--azul1)} .t-og{background:var(--navy)} .t-epc{background:var(--laranja)}
+.t-eng{background:var(--azul2)} .t-quim{background:var(--vermelho)} .t-mont{background:var(--grafite)}
+.st{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;color:#fff}
+.st-ok{background:var(--verde)} .st-at{background:var(--laranja)} .st-cr{background:var(--vermelho)}
+.rito{display:inline-block;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700;background:#EAF2F8;color:var(--navy);border:1px solid var(--azul2t)}
+/* BOTOES */
+.btn{background:var(--laranja);color:#fff;border:none;padding:9px 16px;border-radius:7px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s}
+.btn:hover{background:var(--laranja2)}
+.btn.sec{background:var(--azul1)} .btn.sec:hover{background:var(--azul2)}
+.btn.gray{background:var(--cinza-esc)} .btn.gray:hover{background:var(--grafite)}
+.btn.sm{padding:5px 10px;font-size:12px}
+.btn.danger{background:var(--vermelho)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.search{flex:1;min-width:180px;padding:9px 12px;border:1px solid var(--borda);border-radius:7px;font-size:13.5px}
+/* CARDS DE REGISTRO */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+.card{background:#fff;border:1px solid var(--borda);border-radius:11px;box-shadow:var(--sombra);overflow:hidden;display:flex;flex-direction:column}
+.card .top{background:var(--navy);color:#fff;padding:12px 15px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card .top .nm{font-weight:700;font-size:14.5px}
+.card .top .meta{font-size:11px;color:var(--azul2t);margin-top:2px}
+.card .body{padding:13px 15px;flex:1;font-size:13px}
+.card .body .row{margin-bottom:7px}
+.card .body .lbl{font-size:11px;color:var(--cinza-esc);text-transform:uppercase;letter-spacing:.3px;font-weight:700}
+.card .actions{display:flex;gap:8px;padding:11px 15px;border-top:1px solid var(--borda);flex-wrap:wrap}
+.next{background:#FFF6F0;border-left:4px solid var(--laranja);padding:7px 10px;border-radius:5px;font-size:12.5px;margin-top:7px}
+.hist{margin-top:8px;border-top:1px dashed var(--borda);padding-top:8px}
+.hist .h{font-size:12px;padding:6px 9px;background:var(--zebra);border-radius:6px;margin-bottom:5px;border-left:3px solid var(--azul2)}
+.hist .h .d{font-weight:700;color:var(--navy)}
+.empty{text-align:center;padding:50px 20px;color:var(--cinza-claro)}
+.empty .ic{font-size:46px;margin-bottom:10px}
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(24,37,84,.55);z-index:100;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:14px;max-width:640px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.3);animation:pop .2s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .mhead{background:var(--navy);color:#fff;padding:15px 20px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center}
+.modal .mhead h3{font-size:16px}
+.modal .mhead .x{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1}
+.modal .mbody{padding:18px 20px;max-height:68vh;overflow-y:auto}
+.modal .mfoot{padding:14px 20px;border-top:1px solid var(--borda);display:flex;justify-content:flex-end;gap:10px}
+.fg{margin-bottom:13px}
+.fg label{display:block;font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 11px;border:1px solid var(--borda);border-radius:7px;font-size:13.5px;font-family:inherit}
+.fg textarea{resize:vertical;min-height:62px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hint{font-size:11px;color:var(--cinza-claro);margin-top:3px}
+.note{background:#FFF6F0;border-left:4px solid var(--laranja);padding:12px 15px;border-radius:6px;font-size:13px;margin:14px 0;color:var(--cinza-esc)}
+.src{font-size:11.5px;color:#8A8F99}
+.src a{color:var(--azul1)}
+.due{color:var(--vermelho);font-weight:700}
+.due.ok{color:var(--verde)}
+/* FOOTER */
+footer{background:var(--navy);color:#cdd6e8;text-align:center;padding:18px;font-size:12.5px;margin-top:30px}
+footer a{color:var(--azul2t);text-decoration:none}
+footer .rev{display:block;margin-top:6px;color:var(--cinza-claro);font-size:11px}
+@media (max-width:700px){.fg2{grid-template-columns:1fr}nav{top:92px}main{padding:16px 12px 50px}}
+@media print{nav,.toolbar,.card .actions,.stamp{display:none}.tab{display:block!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Gestão Comercial</h1>
+    <div class="sub">Contratos · Ritos de Visita · Prospecção (CRM) — Energia, O&amp;G, EPC e Engenharia</div>
+  </div>
+  <div class="stamp" id="stamp">—</div>
+</header>
+
+<nav id="nav">
+  <button class="active" data-tab="plano">📋 Plano</button>
+  <button data-tab="contratos">📁 Contratos Ativos</button>
+  <button data-tab="agenda">🗓️ Agenda de Ritos</button>
+  <button data-tab="prospec">🎯 Prospecção / CRM</button>
+  <button data-tab="alvos">🏢 Empresas-Alvo</button>
+</nav>
+
+<main>
+
+<!-- ═══════════════ PLANO ═══════════════ -->
+<section class="tab active" id="plano">
+  <h2 class="section">Plano de Trabalho</h2>
+  <p class="lead">Roteiro de prospecção e gestão de relacionamento. Use a aba <strong>Contratos Ativos</strong> para definir ritos de visita aos contratos em andamento e a aba <strong>Prospecção</strong> para acompanhar leads. Tudo é salvo automaticamente no seu navegador.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="v" id="k-contr">0</div><div class="l">Contratos cadastrados</div></div>
+    <div class="kpi alt"><div class="v" id="k-prosp">0</div><div class="l">Prospects no funil</div></div>
+    <div class="kpi alt2"><div class="v" id="k-event">0</div><div class="l">Eventos/visitas registrados</div></div>
+    <div class="kpi alt3"><div class="v" id="k-vence">0</div><div class="l">Ritos vencendo (≤7 dias)</div></div>
+  </div>
+  <div class="note">💡 <strong>Como funciona o rito:</strong> ao cadastrar um contrato ou prospect, você define a frequência (semanal / quinzenal / mensal). O sistema calcula a próxima data e lista na <strong>Agenda de Ritos</strong>. Ao registrar uma visita, a próxima data é recalculada automaticamente e o histórico fica salvo.</div>
+  <h3 class="sub">Etapas</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>#</th><th>Etapa</th><th>Foco</th><th>Prazo</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Segmentação &amp; ICP</td><td>Definir perfil ideal por categoria; priorizar por capex recente</td><td>Sem. 1–2</td></tr>
+      <tr><td>2</td><td>Inteligência de mercado</td><td>Monitorar editais e adjudicações (Petrobras, Vale, Braskem)</td><td>Contínuo</td></tr>
+      <tr><td>3</td><td>Mapeamento de contatos</td><td>Decisores: Suprimentos, Engenharia, Planejamento, Contratos</td><td>Sem. 2–4</td></tr>
+      <tr><td>4</td><td>Abordagem &amp; proposta</td><td>Mensagem de valor por perfil; cadência multicanal</td><td>Sem. 4–8</td></tr>
+      <tr><td>5</td><td>Pipeline &amp; ritos</td><td>Funil + visitas periódicas registradas</td><td>Contínuo</td></tr>
+      <tr><td>6</td><td>Pós-venda &amp; expansão</td><td>Cross/upsell na conta; indicações via consórcios</td><td>Após 1º contrato</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ═══════════════ CONTRATOS ATIVOS ═══════════════ -->
+<section class="tab" id="contratos">
+  <h2 class="section">Contratos Ativos &amp; Ritos de Visita</h2>
+  <p class="lead">Cadastre contratos em andamento, defina o rito de acompanhamento e registre cada visita/evento com pauta, status e ações.</p>
+  <div class="toolbar">
+    <button class="btn" onclick="openContrato()">+ Novo contrato</button>
+    <input class="search" id="searchContr" placeholder="🔎 Buscar por cliente, projeto, responsável…" oninput="renderContratos()">
+  </div>
+  <div id="contratosList" class="cards"></div>
+</section>
+
+<!-- ═══════════════ AGENDA ═══════════════ -->
+<section class="tab" id="agenda">
+  <h2 class="section">Agenda de Ritos</h2>
+  <p class="lead">Próximas visitas calculadas a partir da frequência de cada contrato e prospect, ordenadas por data. Avise os envolvidos e registre o evento direto daqui.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Próxima data</th><th>Origem</th><th>Cliente / Projeto</th><th>Rito</th><th>Envolvidos</th><th>Ação</th></tr></thead>
+    <tbody id="agendaBody"></tbody>
+  </table></div>
+  <div id="agendaEmpty" class="empty" style="display:none"><div class="ic">🗓️</div>Nenhum rito agendado. Cadastre um contrato ou prospect com frequência definida.</div>
+</section>
+
+<!-- ═══════════════ PROSPECÇÃO ═══════════════ -->
+<section class="tab" id="prospec">
+  <h2 class="section">Prospecção / CRM</h2>
+  <p class="lead">Cadastre clientes potenciais, seus contatos e o rito de acompanhamento. Cada interação fica registrada no histórico do prospect.</p>
+  <div class="toolbar">
+    <button class="btn" onclick="openProspect()">+ Novo prospect</button>
+    <input class="search" id="searchProsp" placeholder="🔎 Buscar por empresa, contato, estágio…" oninput="renderProspects()">
+  </div>
+  <div id="prospectsList" class="cards"></div>
+</section>
+
+<!-- ═══════════════ ALVOS ═══════════════ -->
+<section class="tab" id="alvos">
+  <h2 class="section">Empresas-Alvo (referência)</h2>
+  <p class="lead">Lista categorizada para alimentar a prospecção. Clique em “+ Prospectar” para enviar a empresa direto ao CRM.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Empresa</th><th>Categoria</th><th>Sede</th><th>Movimento recente</th><th></th></tr></thead>
+    <tbody id="alvosBody"></tbody>
+  </table></div>
+  <p class="src">Fontes: comunicados Petrobras/SEC (6-K, dez/2025–mai/2026); Vale (4Q25/1Q26); Agência Brasil; Revista Fórum; RCN67; Azevedo &amp; Travassos; Revista OE. Validar dados antes de uso comercial.</p>
+</section>
+
+</main>
+
+<!-- ═══════════════ MODAL CONTRATO ═══════════════ -->
+<div class="modal-bg" id="modalContrato">
+  <div class="modal">
+    <div class="mhead"><h3 id="mcTitle">Novo contrato</h3><button class="x" onclick="closeModal('modalContrato')">×</button></div>
+    <div class="mbody">
+      <input type="hidden" id="c_id">
+      <div class="fg2">
+        <div class="fg"><label>Cliente / Contratante *</label><input id="c_cliente" placeholder="Ex.: Petrobras"></div>
+        <div class="fg"><label>Categoria</label><select id="c_cat">
+          <option>Asset Owner</option><option>EPCista</option><option>Engenharia</option><option>Montagem</option><option>Química/Petroquímica</option></select></div>
+      </div>
+      <div class="fg"><label>Projeto / Objeto *</label><input id="c_projeto" placeholder="Ex.: UFN-3 EPC 07 — energia/amônia"></div>
+      <div class="fg2">
+        <div class="fg"><label>Valor / Escopo</label><input id="c_valor" placeholder="Ex.: R$ 663,5 mi"></div>
+        <div class="fg"><label>Local / Canteiro</label><input id="c_local" placeholder="Ex.: Três Lagoas/MS"></div>
+      </div>
+      <div class="fg2">
+        <div class="fg"><label>Responsável interno</label><input id="c_resp" placeholder="Quem atende a conta"></div>
+        <div class="fg"><label>Status do contrato</label><select id="c_status">
+          <option value="ok">🟢 No prazo</option><option value="at">🟡 Atenção</option><option value="cr">🔴 Crítico</option></select></div>
+      </div>
+      <div class="fg2">
+        <div class="fg"><label>Rito de visita *</label><select id="c_rito">
+          <option value="semanal">Semanal</option><option value="quinzenal" selected>Quinzenal</option><option value="mensal">Mensal</option><option value="">Sem rito</option></select></div>
+        <div class="fg"><label>Próxima visita</label><input type="date" id="c_prox"></div>
+      </div>
+      <div class="fg"><label>Envolvidos a avisar</label><input id="c_envolvidos" placeholder="Nomes/áreas separados por vírgula"><div class="hint">Aparecem no botão de aviso (WhatsApp/e-mail) da agenda.</div></div>
+    </div>
+    <div class="mfoot"><button class="btn gray" onclick="closeModal('modalContrato')">Cancelar</button><button class="btn" onclick="saveContrato()">Salvar</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL EVENTO/VISITA ═══════════════ -->
+<div class="modal-bg" id="modalEvento">
+  <div class="modal">
+    <div class="mhead"><h3 id="meTitle">Registrar visita</h3><button class="x" onclick="closeModal('modalEvento')">×</button></div>
+    <div class="mbody">
+      <input type="hidden" id="e_contratoId">
+      <div class="fg2">
+        <div class="fg"><label>Data do evento *</label><input type="date" id="e_data"></div>
+        <div class="fg"><label>Tipo</label><select id="e_tipo">
+          <option>Visita presencial</option><option>Reunião online</option><option>Ligação</option><option>E-mail/mensagem</option></select></div>
+      </div>
+      <div class="fg"><label>Participantes presentes</label><input id="e_part" placeholder="Quem participou do encontro"></div>
+      <div class="fg2">
+        <div class="fg"><label>Status no momento</label><select id="e_status">
+          <option value="ok">🟢 No prazo</option><option value="at">🟡 Atenção</option><option value="cr">🔴 Crítico</option></select></div>
+        <div class="fg"><label>Avisados previamente?</label><select id="e_aviso"><option>Sim</option><option>Não</option></select></div>
+      </div>
+      <div class="fg"><label>Pauta / assuntos tratados *</label><textarea id="e_pauta" placeholder="O que foi discutido"></textarea></div>
+      <div class="fg"><label>Pendências / ações definidas</label><textarea id="e_acoes" placeholder="O que ficou de fazer"></textarea></div>
+      <div class="fg2">
+        <div class="fg"><label>Responsável pela ação</label><input id="e_respacao" placeholder="Quem"></div>
+        <div class="fg"><label>Prazo da ação</label><input type="date" id="e_prazoacao"></div>
+      </div>
+      <div class="fg"><label>Próximo passo</label><input id="e_proximo" placeholder="Ex.: levar proposta técnica na próxima visita"></div>
+      <div class="note" style="margin:0">✔ Ao salvar, a <strong>próxima visita</strong> do contrato é recalculada pela frequência do rito.</div>
+    </div>
+    <div class="mfoot"><button class="btn gray" onclick="closeModal('modalEvento')">Cancelar</button><button class="btn" onclick="saveEvento()">Salvar visita</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL PROSPECT ═══════════════ -->
+<div class="modal-bg" id="modalProspect">
+  <div class="modal">
+    <div class="mhead"><h3 id="mpTitle">Novo prospect</h3><button class="x" onclick="closeModal('modalProspect')">×</button></div>
+    <div class="mbody">
+      <input type="hidden" id="p_id">
+      <div class="fg2">
+        <div class="fg"><label>Empresa *</label><input id="p_empresa" placeholder="Ex.: Techint"></div>
+        <div class="fg"><label>Categoria</label><select id="p_cat">
+          <option>Asset Owner</option><option>EPCista</option><option>Engenharia</option><option>Montagem</option><option>Química/Petroquímica</option></select></div>
+      </div>
+      <div class="fg"><label>Endereço / sede</label><input id="p_end" placeholder="Cidade/UF ou endereço completo"></div>
+      <h3 class="sub" style="margin-top:6px;font-size:14px">Contato principal</h3>
+      <div class="fg2">
+        <div class="fg"><label>Nome</label><input id="p_cnome" placeholder="Nome do contato"></div>
+        <div class="fg"><label>Cargo</label><input id="p_ccargo" placeholder="Ex.: Gerente de Suprimentos"></div>
+      </div>
+      <div class="fg2">
+        <div class="fg"><label>Telefone</label><input id="p_ctel" placeholder="(11) 9...."></div>
+        <div class="fg"><label>E-mail</label><input id="p_cmail" placeholder="contato@empresa.com"></div>
+      </div>
+      <div class="fg2">
+        <div class="fg"><label>Estágio no funil</label><select id="p_estagio">
+          <option>Lead</option><option>Qualificado</option><option>Proposta</option><option>Negociação</option><option>Fechado</option><option>Perdido</option></select></div>
+        <div class="fg"><label>Rito de contato *</label><select id="p_rito">
+          <option value="semanal">Semanal</option><option value="quinzenal">Quinzenal</option><option value="mensal" selected>Mensal</option><option value="">Sem rito</option></select></div>
+      </div>
+      <div class="fg2">
+        <div class="fg"><label>Próximo contato</label><input type="date" id="p_prox"></div>
+        <div class="fg"><label>Responsável interno</label><input id="p_resp" placeholder="Quem atende"></div>
+      </div>
+      <div class="fg"><label>Observações / contexto</label><textarea id="p_obs" placeholder="Movimento recente, gancho de abordagem, etc."></textarea></div>
+    </div>
+    <div class="mfoot"><button class="btn gray" onclick="closeModal('modalProspect')">Cancelar</button><button class="btn" onclick="saveProspect()">Salvar</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL INTERAÇÃO PROSPECT ═══════════════ -->
+<div class="modal-bg" id="modalInteracao">
+  <div class="modal">
+    <div class="mhead"><h3>Registrar interação</h3><button class="x" onclick="closeModal('modalInteracao')">×</button></div>
+    <div class="mbody">
+      <input type="hidden" id="i_prospId">
+      <div class="fg2">
+        <div class="fg"><label>Data *</label><input type="date" id="i_data"></div>
+        <div class="fg"><label>Tipo</label><select id="i_tipo">
+          <option>Ligação</option><option>Reunião</option><option>E-mail</option><option>WhatsApp</option><option>Visita</option></select></div>
+      </div>
+      <div class="fg"><label>Resumo / resultado *</label><textarea id="i_resumo" placeholder="O que foi conversado e qual o resultado"></textarea></div>
+      <div class="fg2">
+        <div class="fg"><label>Atualizar estágio</label><select id="i_estagio">
+          <option value="">— manter —</option><option>Lead</option><option>Qualificado</option><option>Proposta</option><option>Negociação</option><option>Fechado</option><option>Perdido</option></select></div>
+        <div class="fg"><label>Próximo contato</label><input type="date" id="i_prox"></div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn gray" onclick="closeModal('modalInteracao')">Cancelar</button><button class="btn" onclick="saveInteracao()">Salvar</button></div>
+  </div>
+</div>
+
+<footer>
+  Criado por Rodrigo Sasso · <a href="https://wa.me/5511975718711" target="_blank">(11) 97571-8711</a> · <a href="mailto:rodrigo.sasso@coodex.ai">rodrigo.sasso@coodex.ai</a>
+  <span class="rev">Revisão v2.0 · gestão de contratos, ritos e prospecção</span>
+</footer>
+
+<script>
+/* ═══════════════ DADOS DE REFERÊNCIA (empresas-alvo) ═══════════════ */
+const ALVOS=[
+  {e:"Petrobras",cat:"Asset Owner",sede:"Rio de Janeiro/RJ",mov:"PN 2026–2030; retomada UFN-3 e Boa Ventura"},
+  {e:"Vale",cat:"Asset Owner",sede:"Belo Horizonte/MG",mov:"Serra Sul +20 (US$ 2,8 bi); projeto Bacaba (cobre)"},
+  {e:"Braskem",cat:"Química/Petroquímica",sede:"São Paulo/SP",mov:"Contratos nafta/NGL c/ Petrobras; expansão Duque de Caxias"},
+  {e:"Eneva",cat:"Asset Owner",sede:"Rio de Janeiro/RJ",mov:"Expansão de geração firme a gás"},
+  {e:"Cosan / Compass",cat:"Asset Owner",sede:"São Paulo/SP",mov:"Consolidação em distribuição de gás"},
+  {e:"Shell Brasil",cat:"Asset Owner",sede:"Rio de Janeiro/RJ",mov:"Sócia pré-sal (Sururu/Berbigão)"},
+  {e:"Techint Eng. e Construção",cat:"EPCista",sede:"São Paulo/SP",mov:"Retomada de grandes contratos EPC"},
+  {e:"Toyo Setal (TSE/Toyo)",cat:"EPCista",sede:"São Paulo/SP",mov:"HDT Replan; Gaslub/Boa Ventura"},
+  {e:"Nova Engevix",cat:"EPCista",sede:"São Paulo/SP",mov:"EPC 07 UFN-3 (c/ PowerChina) — R$ 663,5 mi"},
+  {e:"Coesa Construção e Montagens",cat:"EPCista",sede:"—",mov:"EPC 06 UFN-3 — R$ 548,6 mi"},
+  {e:"Azevedo & Travassos / Heftos",cat:"EPCista",sede:"São Paulo/SP",mov:"EPC Complexo Boa Ventura (Petrobras)"},
+  {e:"Promon Engenharia",cat:"Engenharia",sede:"São Paulo/SP",mov:"Atende 12 das 13 unidades de refino do Brasil"},
+  {e:"Milplan Engenharia",cat:"Engenharia",sede:"Rio de Janeiro/RJ",mov:"Paradas, suprimentos e operação assistida"},
+  {e:"TS Global",cat:"Engenharia",sede:"Brasil",mov:"Fundações + civil + montagem integradas"},
+  {e:"Enesa",cat:"Montagem",sede:"—",mov:"Montagem industrial em expansão (~30% a.a.)"},
+  {e:"MPE Montagens",cat:"Montagem",sede:"—",mov:"Infraestrutura e plantas industriais"},
+  {e:"Planem Engenharia",cat:"Montagem",sede:"—",mov:"Setor elétrico/telecom (+147%)"},
+  {e:"Yara Brasil",cat:"Química/Petroquímica",sede:"São Paulo/SP",mov:"Cadeia de fertilizantes (sinergia UFN-3)"},
+  {e:"Unipar",cat:"Química/Petroquímica",sede:"São Paulo/SP",mov:"Cloro-soda e PVC"}
+];
+const CAT_TAG={"Asset Owner":"t-ao","EPCista":"t-epc","Engenharia":"t-eng","Montagem":"t-mont","Química/Petroquímica":"t-quim"};
+const ST_TAG={ok:"st-ok",at:"st-at",cr:"st-cr"},ST_LBL={ok:"🟢 No prazo",at:"🟡 Atenção",cr:"🔴 Crítico"};
+const RITO_DIAS={semanal:7,quinzenal:14,mensal:30};
+
+/* ═══════════════ PERSISTÊNCIA ═══════════════ */
+let contratos=[],prospects=[];
+function load(){try{contratos=JSON.parse(localStorage.getItem('g_contratos')||'[]');prospects=JSON.parse(localStorage.getItem('g_prospects')||'[]');}catch(e){contratos=[];prospects=[];}}
+function save(){localStorage.setItem('g_contratos',JSON.stringify(contratos));localStorage.setItem('g_prospects',JSON.stringify(prospects));}
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today=()=>new Date().toISOString().slice(0,10);
+function addDias(dataStr,dias){const d=dataStr?new Date(dataStr+'T00:00'):new Date();d.setDate(d.getDate()+dias);return d.toISOString().slice(0,10);}
+function fmt(d){if(!d)return'—';const p=new Date(d+'T00:00');return String(p.getDate()).padStart(2,'0')+'/'+String(p.getMonth()+1).padStart(2,'0')+'/'+p.getFullYear();}
+function diasAte(d){if(!d)return null;return Math.ceil((new Date(d+'T00:00')-new Date(today()+'T00:00'))/864e5);}
+
+/* ═══════════════ NAV ═══════════════ */
+const ordem=['plano','contratos','agenda','prospec','alvos'];
+function show(id){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.id===id));
+  try{localStorage.setItem('g_tab',id)}catch(e){}}
+document.getElementById('nav').addEventListener('click',e=>{if(e.target.dataset.tab)show(e.target.dataset.tab)});
+document.addEventListener('keydown',e=>{if(document.querySelector('.modal-bg.open'))return;
+  const a=ordem.findIndex(id=>document.getElementById(id).classList.contains('active'));
+  if(e.key==='ArrowRight')show(ordem[(a+1)%ordem.length]);
+  if(e.key==='ArrowLeft')show(ordem[(a-1+ordem.length)%ordem.length]);});
+
+/* ═══════════════ MODAIS ═══════════════ */
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function openM(id){document.getElementById(id).classList.add('open');}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+/* ═══════════════ CONTRATOS ═══════════════ */
+function openContrato(id){
+  const c=id?contratos.find(x=>x.id===id):null;
+  document.getElementById('mcTitle').textContent=c?'Editar contrato':'Novo contrato';
+  document.getElementById('c_id').value=c?c.id:'';
+  document.getElementById('c_cliente').value=c?c.cliente:'';
+  document.getElementById('c_cat').value=c?c.cat:'Asset Owner';
+  document.getElementById('c_projeto').value=c?c.projeto:'';
+  document.getElementById('c_valor').value=c?c.valor:'';
+  document.getElementById('c_local').value=c?c.local:'';
+  document.getElementById('c_resp').value=c?c.resp:'';
+  document.getElementById('c_status').value=c?c.status:'ok';
+  document.getElementById('c_rito').value=c?c.rito:'quinzenal';
+  document.getElementById('c_prox').value=c?c.prox:today();
+  document.getElementById('c_envolvidos').value=c?c.envolvidos:'';
+  openM('modalContrato');
+}
+function saveContrato(){
+  const cliente=document.getElementById('c_cliente').value.trim();
+  const projeto=document.getElementById('c_projeto').value.trim();
+  if(!cliente||!projeto){alert('Cliente e Projeto são obrigatórios.');return;}
+  const id=document.getElementById('c_id').value;
+  const obj={
+    cliente,projeto,
+    cat:document.getElementById('c_cat').value,
+    valor:document.getElementById('c_valor').value.trim(),
+    local:document.getElementById('c_local').value.trim(),
+    resp:document.getElementById('c_resp').value.trim(),
+    status:document.getElementById('c_status').value,
+    rito:document.getElementById('c_rito').value,
+    prox:document.getElementById('c_prox').value,
+    envolvidos:document.getElementById('c_envolvidos').value.trim()
+  };
+  if(id){const c=contratos.find(x=>x.id===id);Object.assign(c,obj);c.atualizado=today();}
+  else{obj.id=uid();obj.criado=today();obj.atualizado=today();obj.eventos=[];contratos.unshift(obj);}
+  save();closeModal('modalContrato');renderAll();
+}
+function delContrato(id){if(!confirm('Excluir este contrato e seu histórico?'))return;contratos=contratos.filter(c=>c.id!==id);save();renderAll();}
+
+function renderContratos(){
+  const q=(document.getElementById('searchContr').value||'').toLowerCase();
+  const list=document.getElementById('contratosList');
+  const fil=contratos.filter(c=>(c.cliente+c.projeto+c.resp+c.local).toLowerCase().includes(q));
+  if(!fil.length){list.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ic">📁</div>'+(contratos.length?'Nenhum resultado.':'Nenhum contrato cadastrado. Clique em “+ Novo contrato”.')+'</div>';return;}
+  list.innerHTML=fil.map(c=>{
+    const evs=(c.eventos||[]).slice().sort((a,b)=>b.data.localeCompare(a.data));
+    const d=diasAte(c.prox);
+    const proxTxt=c.rito?('<span class="due'+(d!==null&&d>=0?' ok':'')+'">'+(d===null?'—':d<0?('Atrasado '+(-d)+'d'):d===0?'Hoje':('em '+d+'d'))+'</span>'):'sem rito';
+    return `<div class="card">
+      <div class="top"><div><div class="nm">${esc(c.cliente)}</div><div class="meta">${esc(c.projeto)}</div></div>
+      <span class="tag ${CAT_TAG[c.cat]||''}">${c.cat}</span></div>
+      <div class="body">
+        <div class="row"><span class="st ${ST_TAG[c.status]}">${ST_LBL[c.status]}</span> ${c.valor?'· '+esc(c.valor):''}</div>
+        ${c.local?`<div class="row"><span class="lbl">Local</span> ${esc(c.local)}</div>`:''}
+        ${c.resp?`<div class="row"><span class="lbl">Responsável</span> ${esc(c.resp)}</div>`:''}
+        <div class="row"><span class="lbl">Rito</span> ${c.rito?`<span class="rito">${c.rito}</span> · próxima ${fmt(c.prox)} (${proxTxt})`:'sem rito definido'}</div>
+        ${c.envolvidos?`<div class="row"><span class="lbl">Avisar</span> ${esc(c.envolvidos)}</div>`:''}
+        ${evs.length?`<div class="hist"><span class="lbl">Histórico (${evs.length})</span>${evs.slice(0,3).map(ev=>`<div class="h"><span class="d">${fmt(ev.data)}</span> · ${esc(ev.tipo)} <span class="st ${ST_TAG[ev.status]}" style="font-size:9px">${ST_LBL[ev.status]}</span><br>${esc((ev.pauta||'').slice(0,90))}${ev.proximo?`<div class="next">➡ ${esc(ev.proximo)}</div>`:''}</div>`).join('')}${evs.length>3?`<div style="font-size:11px;color:#999">+${evs.length-3} anteriores</div>`:''}</div>`:''}
+      </div>
+      <div class="actions">
+        <button class="btn sm" onclick="openEvento('${c.id}')">📝 Registrar visita</button>
+        ${c.envolvidos?`<button class="btn sm sec" onclick="avisar('${c.id}')">📲 Avisar</button>`:''}
+        <button class="btn sm gray" onclick="openContrato('${c.id}')">Editar</button>
+        <button class="btn sm danger" onclick="delContrato('${c.id}')">Excluir</button>
+      </div></div>`;
+  }).join('');
+}
+
+/* ═══════════════ EVENTOS / VISITAS ═══════════════ */
+function openEvento(contratoId){
+  document.getElementById('e_contratoId').value=contratoId;
+  const c=contratos.find(x=>x.id===contratoId);
+  document.getElementById('meTitle').textContent='Registrar visita · '+c.cliente;
+  document.getElementById('e_data').value=today();
+  document.getElementById('e_tipo').value='Visita presencial';
+  document.getElementById('e_part').value='';
+  document.getElementById('e_status').value=c.status||'ok';
+  document.getElementById('e_aviso').value='Sim';
+  document.getElementById('e_pauta').value='';
+  document.getElementById('e_acoes').value='';
+  document.getElementById('e_respacao').value='';
+  document.getElementById('e_prazoacao').value='';
+  document.getElementById('e_proximo').value='';
+  openM('modalEvento');
+}
+function saveEvento(){
+  const cid=document.getElementById('e_contratoId').value;
+  const c=contratos.find(x=>x.id===cid);
+  const data=document.getElementById('e_data').value;
+  const pauta=document.getElementById('e_pauta').value.trim();
+  if(!data||!pauta){alert('Data e Pauta são obrigatórios.');return;}
+  const ev={data,
+    tipo:document.getElementById('e_tipo').value,
+    part:document.getElementById('e_part').value.trim(),
+    status:document.getElementById('e_status').value,
+    aviso:document.getElementById('e_aviso').value,
+    pauta,
+    acoes:document.getElementById('e_acoes').value.trim(),
+    respacao:document.getElementById('e_respacao').value.trim(),
+    prazoacao:document.getElementById('e_prazoacao').value,
+    proximo:document.getElementById('e_proximo').value.trim()};
+  c.eventos=c.eventos||[];c.eventos.push(ev);
+  c.status=ev.status;
+  if(c.rito&&RITO_DIAS[c.rito])c.prox=addDias(data,RITO_DIAS[c.rito]);
+  c.atualizado=today();
+  save();closeModal('modalEvento');renderAll();
+}
+
+/* ═══════════════ AVISAR ENVOLVIDOS (WhatsApp/e-mail) ═══════════════ */
+function avisar(contratoId){
+  const c=contratos.find(x=>x.id===contratoId);
+  const txt=`Olá! Lembrete de visita/acompanhamento do contrato:%0A%0A`+
+    `Cliente: ${c.cliente}%0AProjeto: ${c.projeto}%0AData prevista: ${fmt(c.prox)}%0ARito: ${c.rito||'—'}%0AEnvolvidos: ${c.envolvidos}%0A%0A`+
+    `— Rodrigo Sasso (11) 97571-8711`;
+  window.open('https://wa.me/?text='+txt,'_blank');
+}
+
+/* ═══════════════ PROSPECTS ═══════════════ */
+function openProspect(pre){
+  const p=(pre&&pre.id)?prospects.find(x=>x.id===pre.id):null;
+  document.getElementById('mpTitle').textContent=p?'Editar prospect':'Novo prospect';
+  document.getElementById('p_id').value=p?p.id:'';
+  document.getElementById('p_empresa').value=p?p.empresa:(pre&&pre.empresa?pre.empresa:'');
+  document.getElementById('p_cat').value=p?p.cat:(pre&&pre.cat?pre.cat:'Asset Owner');
+  document.getElementById('p_end').value=p?p.end:(pre&&pre.end?pre.end:'');
+  document.getElementById('p_cnome').value=p?p.cnome:'';
+  document.getElementById('p_ccargo').value=p?p.ccargo:'';
+  document.getElementById('p_ctel').value=p?p.ctel:'';
+  document.getElementById('p_cmail').value=p?p.cmail:'';
+  document.getElementById('p_estagio').value=p?p.estagio:'Lead';
+  document.getElementById('p_rito').value=p?p.rito:'mensal';
+  document.getElementById('p_prox').value=p?p.prox:today();
+  document.getElementById('p_resp').value=p?p.resp:'';
+  document.getElementById('p_obs').value=p?p.obs:(pre&&pre.obs?pre.obs:'');
+  openM('modalProspect');
+}
+function saveProspect(){
+  const empresa=document.getElementById('p_empresa').value.trim();
+  if(!empresa){alert('Empresa é obrigatória.');return;}
+  const id=document.getElementById('p_id').value;
+  const obj={empresa,
+    cat:document.getElementById('p_cat').value,
+    end:document.getElementById('p_end').value.trim(),
+    cnome:document.getElementById('p_cnome').value.trim(),
+    ccargo:document.getElementById('p_ccargo').value.trim(),
+    ctel:document.getElementById('p_ctel').value.trim(),
+    cmail:document.getElementById('p_cmail').value.trim(),
+    estagio:document.getElementById('p_estagio').value,
+    rito:document.getElementById('p_rito').value,
+    prox:document.getElementById('p_prox').value,
+    resp:document.getElementById('p_resp').value.trim(),
+    obs:document.getElementById('p_obs').value.trim()};
+  if(id){const p=prospects.find(x=>x.id===id);Object.assign(p,obj);p.atualizado=today();}
+  else{obj.id=uid();obj.criado=today();obj.atualizado=today();obj.inter=[];prospects.unshift(obj);}
+  save();closeModal('modalProspect');renderAll();
+}
+function delProspect(id){if(!confirm('Excluir este prospect e seu histórico?'))return;prospects=prospects.filter(p=>p.id!==id);save();renderAll();}
+
+function renderProspects(){
+  const q=(document.getElementById('searchProsp').value||'').toLowerCase();
+  const list=document.getElementById('prospectsList');
+  const fil=prospects.filter(p=>(p.empresa+p.cnome+p.estagio+p.resp).toLowerCase().includes(q));
+  if(!fil.length){list.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ic">🎯</div>'+(prospects.length?'Nenhum resultado.':'Nenhum prospect cadastrado. Clique em “+ Novo prospect” ou use a aba Empresas-Alvo.')+'</div>';return;}
+  list.innerHTML=fil.map(p=>{
+    const its=(p.inter||[]).slice().sort((a,b)=>b.data.localeCompare(a.data));
+    const d=diasAte(p.prox);
+    const proxTxt=p.rito?('<span class="due'+(d!==null&&d>=0?' ok':'')+'">'+(d===null?'—':d<0?('Atrasado '+(-d)+'d'):d===0?'Hoje':('em '+d+'d'))+'</span>'):'sem rito';
+    return `<div class="card">
+      <div class="top"><div><div class="nm">${esc(p.empresa)}</div><div class="meta">${esc(p.estagio)}</div></div>
+      <span class="tag ${CAT_TAG[p.cat]||''}">${p.cat}</span></div>
+      <div class="body">
+        ${p.cnome?`<div class="row"><span class="lbl">Contato</span> ${esc(p.cnome)}${p.ccargo?' — '+esc(p.ccargo):''}</div>`:''}
+        ${(p.ctel||p.cmail)?`<div class="row">${p.ctel?'📞 '+esc(p.ctel):''} ${p.cmail?'· ✉ '+esc(p.cmail):''}</div>`:''}
+        ${p.end?`<div class="row"><span class="lbl">Sede</span> ${esc(p.end)}</div>`:''}
+        <div class="row"><span class="lbl">Rito</span> ${p.rito?`<span class="rito">${p.rito}</span> · próximo ${fmt(p.prox)} (${proxTxt})`:'sem rito'}</div>
+        ${p.resp?`<div class="row"><span class="lbl">Responsável</span> ${esc(p.resp)}</div>`:''}
+        ${p.obs?`<div class="row"><span class="lbl">Contexto</span> ${esc(p.obs)}</div>`:''}
+        ${its.length?`<div class="hist"><span class="lbl">Histórico (${its.length})</span>${its.slice(0,3).map(it=>`<div class="h"><span class="d">${fmt(it.data)}</span> · ${esc(it.tipo)}<br>${esc((it.resumo||'').slice(0,100))}</div>`).join('')}${its.length>3?`<div style="font-size:11px;color:#999">+${its.length-3} anteriores</div>`:''}</div>`:''}
+      </div>
+      <div class="actions">
+        <button class="btn sm" onclick="openInteracao('${p.id}')">📝 Registrar interação</button>
+        ${p.ctel?`<button class="btn sm sec" onclick="waProspect('${p.id}')">📲 WhatsApp</button>`:''}
+        <button class="btn sm gray" onclick="openProspect({id:'${p.id}'})">Editar</button>
+        <button class="btn sm danger" onclick="delProspect('${p.id}')">Excluir</button>
+      </div></div>`;
+  }).join('');
+}
+function waProspect(id){const p=prospects.find(x=>x.id===id);const tel=(p.ctel||'').replace(/\D/g,'');const num=tel.length>=10?('55'+tel):'';window.open('https://wa.me/'+num,'_blank');}
+
+/* ═══════════════ INTERAÇÕES ═══════════════ */
+function openInteracao(pid){
+  document.getElementById('i_prospId').value=pid;
+  document.getElementById('i_data').value=today();
+  document.getElementById('i_tipo').value='Ligação';
+  document.getElementById('i_resumo').value='';
+  document.getElementById('i_estagio').value='';
+  document.getElementById('i_prox').value='';
+  openM('modalInteracao');
+}
+function saveInteracao(){
+  const pid=document.getElementById('i_prospId').value;
+  const p=prospects.find(x=>x.id===pid);
+  const data=document.getElementById('i_data').value;
+  const resumo=document.getElementById('i_resumo').value.trim();
+  if(!data||!resumo){alert('Data e Resumo são obrigatórios.');return;}
+  p.inter=p.inter||[];
+  p.inter.push({data,tipo:document.getElementById('i_tipo').value,resumo});
+  const ne=document.getElementById('i_estagio').value;if(ne)p.estagio=ne;
+  const np=document.getElementById('i_prox').value;
+  if(np)p.prox=np;else if(p.rito&&RITO_DIAS[p.rito])p.prox=addDias(data,RITO_DIAS[p.rito]);
+  p.atualizado=today();
+  save();closeModal('modalInteracao');renderAll();
+}
+
+/* ═══════════════ AGENDA ═══════════════ */
+function renderAgenda(){
+  const itens=[];
+  contratos.forEach(c=>{if(c.rito&&c.prox)itens.push({d:c.prox,origem:'Contrato',nome:c.cliente,proj:c.projeto,rito:c.rito,env:c.envolvidos||'—',act:`<button class="btn sm" onclick="openEvento('${c.id}')">Registrar</button>`});});
+  prospects.forEach(p=>{if(p.rito&&p.prox)itens.push({d:p.prox,origem:'Prospect',nome:p.empresa,proj:p.cnome||'—',rito:p.rito,env:p.cnome||'—',act:`<button class="btn sm" onclick="openInteracao('${p.id}')">Registrar</button>`});});
+  itens.sort((a,b)=>a.d.localeCompare(b.d));
+  const body=document.getElementById('agendaBody');
+  document.getElementById('agendaEmpty').style.display=itens.length?'none':'block';
+  body.innerHTML=itens.map(i=>{const dd=diasAte(i.d);const cls=dd<0?'due':dd<=7?'due':'due ok';
+    return `<tr><td><strong>${fmt(i.d)}</strong><br><span class="${cls}" style="font-size:11px">${dd<0?'atrasado '+(-dd)+'d':dd===0?'hoje':'em '+dd+'d'}</span></td>
+    <td>${i.origem}</td><td><strong>${esc(i.nome)}</strong><br><span style="font-size:11px;color:#888">${esc(i.proj)}</span></td>
+    <td><span class="rito">${i.rito}</span></td><td style="font-size:12px">${esc(i.env)}</td><td>${i.act}</td></tr>`;}).join('');
+}
+
+/* ═══════════════ ALVOS ═══════════════ */
+function renderAlvos(){
+  document.getElementById('alvosBody').innerHTML=ALVOS.map((a,idx)=>`<tr>
+    <td><strong>${esc(a.e)}</strong></td><td><span class="tag ${CAT_TAG[a.cat]}">${a.cat}</span></td>
+    <td>${esc(a.sede)}</td><td style="font-size:12.5px">${esc(a.mov)}</td>
+    <td><button class="btn sm sec" onclick="prospectarAlvo(${idx})">+ Prospectar</button></td></tr>`).join('');
+}
+function prospectarAlvo(idx){const a=ALVOS[idx];openProspect({empresa:a.e,cat:a.cat,end:a.sede,obs:a.mov});}
+
+/* ═══════════════ KPIs + RENDER GERAL ═══════════════ */
+function renderKpis(){
+  document.getElementById('k-contr').textContent=contratos.length;
+  document.getElementById('k-prosp').textContent=prospects.filter(p=>p.estagio!=='Fechado'&&p.estagio!=='Perdido').length;
+  let ev=0;contratos.forEach(c=>ev+=(c.eventos||[]).length);prospects.forEach(p=>ev+=(p.inter||[]).length);
+  document.getElementById('k-event').textContent=ev;
+  let venc=0;[...contratos,...prospects].forEach(x=>{if(x.rito&&x.prox){const d=diasAte(x.prox);if(d!==null&&d<=7)venc++;}});
+  document.getElementById('k-vence').textContent=venc;
+}
+function renderAll(){renderContratos();renderProspects();renderAgenda();renderKpis();}
+function esc(s){return(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+
+/* ═══════════════ INIT ═══════════════ */
+load();renderAlvos();renderAll();
+try{const s=localStorage.getItem('g_tab');if(s)show(s)}catch(e){}
+const dt=new Date();const pad=n=>String(n).padStart(2,'0');
+document.getElementById('stamp').textContent='Sessão · '+pad(dt.getDate())+'/'+pad(dt.getMonth()+1)+'/'+dt.getFullYear()+' '+pad(dt.getHours())+':'+pad(dt.getMinutes());
+</script>
+</body>
+</html>
